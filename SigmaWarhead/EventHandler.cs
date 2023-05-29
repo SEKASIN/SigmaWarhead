@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Timers;
 using PluginAPI.Core;
@@ -10,51 +10,35 @@ namespace SigmaWarhead;
 public class EventHandler
 {
     private int TimeToLaunch;
-    private int TimeToDetonation;
     private bool DebugMode;
-    private string CassieMessage;
-    private Timer _launchTimer; //Minutes
-    private Timer _detonationTimer; //Seconds
-    
+    private string LaunchMessage;
+    private Timer _launchTimer;
+
     [PluginEvent(ServerEventType.MapGenerated)]
     internal void OnGenerated()
     {
         TimeToLaunch = SigmaWarhead.Reference.Config.ActivationTime;
-        TimeToDetonation = SigmaWarhead.Reference.Config.DetonationTime;
         DebugMode = SigmaWarhead.Reference.Config.Debug;
-        CassieMessage = SigmaWarhead.Reference.Config.CassieLines.FirstOrDefault(x => x.Key == "launch").Value;
-        
+        LaunchMessage = SigmaWarhead.Reference.Config.CassieLines.FirstOrDefault(x => x.Key == "launch").Value;
+
         _launchTimer = new Timer(TimeToLaunch * 1000 * 60);
         _launchTimer.Elapsed += LaunchSigmaWarhead;
         _launchTimer.AutoReset = false;
-        _detonationTimer = new Timer(TimeToDetonation * 1000);
-        _detonationTimer.Elapsed += DetonateSigmaWarhead;
-        _detonationTimer.AutoReset = false;
     }
 
     [PluginEvent(ServerEventType.RoundStart)]
     internal void OnRoundStart()
     {
         _launchTimer.Enabled = true;
-        if (DebugMode)
-        {
-            Log.Info("SigmaWarhead armed and will detonate in " + TimeToLaunch+ " minutes.");
-        }
+        if (DebugMode){ Log.Debug("SigmaWarhead armed and will launch in " + TimeToLaunch + " minutes."); }
     }
 
     internal void LaunchSigmaWarhead(Object source, ElapsedEventArgs e)
     {
-        Cassie.Message(CassieMessage);
-        _detonationTimer.Enabled = true;
-        if (DebugMode)
-        {
-            Log.Info("SigmaWarhead launched and will detonate in " + TimeToDetonation + " seconds.");
-        }
-    }
-
-    internal void DetonateSigmaWarhead(Object source, ElapsedEventArgs e)
-    {
-        Cassie.Message("Sigma Warhead detonated");
-        Warhead.Detonate();
+        Log.Info("SigmaWarhead launched.");
+        AlphaWarheadController.Singleton.InstantPrepare();
+        AlphaWarheadController.Singleton.StartDetonation(true, true);
+        AlphaWarheadController.Singleton.IsLocked = true; //There is no escape.
+        Cassie.Message(LaunchMessage, false, true, true);
     }
 }
