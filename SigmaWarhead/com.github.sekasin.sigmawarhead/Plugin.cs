@@ -2,7 +2,7 @@
 using Exiled.API.Features;
 using Log = Exiled.API.Features.Log;
 
-namespace SigmaWarhead.com.github.tendrilll.sigmawarhead {
+namespace SigmaWarhead.com.github.sekasin.sigmawarhead {
     public class SigmaWarhead : Plugin<Config> {
         public override string Name => "SigmaWarhead";
         public override string Author => "TenDRILLL";
