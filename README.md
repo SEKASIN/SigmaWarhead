@@ -2,7 +2,7 @@
 
 > ![sigmawp](https://github.com/TenDRILLL/SigmaWarhead/assets/32621403/0266a0b0-d7a6-4417-a482-af1f6db2a860)
 >
-> A  SCP: Secret Laboratory PluginAPI plugin that re-creates Auto-Nuke feature with a custom C.A.S.S.I.E. voiceline and configurable timer.
+> EXILED plugin that re-creates Auto-Nuke feature with a custom C.A.S.S.I.E. voiceline and configurable timer.
 
 Just edit the config to your liking.
 
