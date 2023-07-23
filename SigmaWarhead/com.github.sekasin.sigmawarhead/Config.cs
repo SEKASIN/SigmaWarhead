@@ -2,10 +2,8 @@
 using System.ComponentModel;
 using Exiled.API.Interfaces;
 
-namespace SigmaWarhead.com.github.tendrilll.sigmawarhead
-{
-    public sealed class Config : IConfig
-    {
+namespace SigmaWarhead.com.github.sekasin.sigmawarhead {
+    public sealed class Config : IConfig {
         [Description("Is the Plugin enabled.")]
         public bool IsEnabled { get; set; } = true;
 
