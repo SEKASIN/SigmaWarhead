@@ -6,14 +6,16 @@ using MEC;
 
 namespace SigmaWarhead.com.github.tendrilll.sigmawarhead;
 
-public class EventHandler{
+public class EventHandler
+{
     private readonly Plugin<Config> _main;
     private readonly bool _debugMode;
     private readonly int TimeToLaunch;
     private readonly string LaunchMessage;
     CoroutineHandle timer;
 
-    public EventHandler(Plugin<Config> plugin){
+    public EventHandler(Plugin<Config> plugin)
+    {
         _main = plugin;
         _debugMode = plugin.Config.Debug;
         if (_debugMode) {
@@ -28,13 +30,15 @@ public class EventHandler{
         Server.RoundEnded += StopSigma2;
     }
 
-    public void UnregisterEvents(){
+    public void UnregisterEvents()
+    {
         Server.RoundStarted -= StartSigma;
         Server.RestartingRound -= StopSigma;
         Server.RoundEnded -= StopSigma2;
     }
 
-    internal void StartSigma(){
+    internal void StartSigma()
+    {
         timer = Timing.CallDelayed(TimeToLaunch * 60, LaunchSigmaWarhead);
         if (_debugMode)
         {
@@ -42,24 +46,27 @@ public class EventHandler{
         }
     }
 
-    internal void StopSigma(){
+    internal void StopSigma()
+    {
         Timing.KillCoroutines(timer);
-        if (_debugMode){
-            Log.Info("SigmaWarhead timer destroyed.");
-        }
+        Log.Info("SigmaWarhead timer destroyed.");
     }
     
-    internal void StopSigma2(RoundEndedEventArgs args){
+    internal void StopSigma2(RoundEndedEventArgs args)
+    {
         StopSigma();
     }
 
-    internal void LaunchSigmaWarhead(){
+    internal void LaunchSigmaWarhead()
+    {
         Log.Info("SigmaWarhead launched.");
-        Warhead.Controller.StartDetonation(false, true);
-        Warhead.Controller.ForceTime(90+13); //+13 for the voiceline. Will make detonation time a variable later.
-        Warhead.IsLocked = true;
         Cassie.Clear();
         Cassie.Message(LaunchMessage, false, true, true);
+        Timing.CallDelayed(12, () => {
+            Warhead.Controller.StartDetonation(false, true);
+            Warhead.Controller.ForceTime(80);
+            Warhead.IsLocked = true;
+        });
         StopSigma();
     }
 }
