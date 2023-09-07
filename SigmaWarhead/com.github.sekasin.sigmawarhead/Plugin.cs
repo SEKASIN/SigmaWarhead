@@ -6,7 +6,7 @@ namespace SigmaWarhead.com.github.sekasin.sigmawarhead {
     public class SigmaWarhead : Plugin<Config> {
         public override string Name => "SigmaWarhead";
         public override string Author => "TenDRILLL";
-        public override Version Version => new Version(1, 0, 3);
+        public override Version Version => new Version(1, 0, 4);
         public EventHandler EventHandler;
 
         public override void OnEnabled() {
